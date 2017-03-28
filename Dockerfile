@@ -1,8 +1,7 @@
-FROM anapsix/alpine-java
+FROM ubuntu:14.04
 
-MAINTAINER Wurstmeister 
-
-RUN apk add --update unzip wget curl docker jq coreutils
+RUN apt-get -qq update &&\
+    apt-get install -y unzip wget curl docker jq coreutils vim lsof
 
 ENV KAFKA_VERSION="0.10.0.1" SCALA_VERSION="2.11"
 ADD download-kafka.sh /tmp/download-kafka.sh
@@ -18,7 +17,11 @@ ADD get_host_public_ip.sh /usr/bin/get_host_public_ip.sh
 
 RUN mkdir /logs
 
-RUN apk add vim lsof
+ADD jdk-8u121-linux-x64.tar.gz /
+RUN ln -s /jdk1.8.0_121 /jdk
+ENV JAVA_HOME /jdk
+RUN apt-get install -y telnet
+ENV TERM=xterm
 
 # Use "exec" form so that it runs as PID 1 (useful for graceful shutdown)
 CMD ["/usr/bin/start-kafka.sh"]
