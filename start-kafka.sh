@@ -6,16 +6,13 @@
 
 if [[ -z "$KAFKA_PORT" ]]; then
     export KAFKA_PORT=9092
-#    export KAFKA_ADVERTISED_PORT=${KAFKA_PORT}
 fi
-if [[ -z "$KAFKA_ADVERTISED_PORT" ]]; then
-#    #export KAFKA_ADVERTISED_PORT=$(docker port `hostname` $KAFKA_PORT | sed -r "s/.*:(.*)/\1/g")
-    export KAFKA_ADVERTISED_PORT=9292
-fi
+
 if [[ -z "$KAFKA_BROKER_ID" ]]; then
     # By default auto allocate broker ID
     export KAFKA_BROKER_ID=-1
 fi
+
 if [[ -z "$KAFKA_LOG_DIRS" ]]; then
     #export KAFKA_LOG_DIRS="/kafka/kafka-logs-$HOSTNAME"
     export KAFKA_LOG_DIRS=/logs
@@ -31,11 +28,8 @@ if [[ -n "$KAFKA_HEAP_OPTS" ]]; then
     unset KAFKA_HEAP_OPTS
 fi
 
-# This needs to be the native host's IP
-if [[ -z "$KAFKA_ADVERTISED_HOST_NAME" && -n "$HOSTNAME_COMMAND" ]]; then
-    export KAFKA_ADVERTISED_HOST_NAME=$(eval $HOSTNAME_COMMAND)
-#    export KAFKA_ADVERTISED_HOST_NAME=localhost
-fi
+rm -rf /tmp/server.properties
+cp $KAFKA_HOME/config/server.properties /tmp/server.properties
 
 for VAR in `env`
 do
@@ -71,7 +65,10 @@ term_handler() {
 
 # Capture kill requests to stop properly
 trap "term_handler" SIGHUP SIGINT SIGTERM
-create-topics.sh & 
+
+if [ ! -z "$KAFKA_CREATE_TOPICS" ]; then
+  create-topics.sh &
+fi
 $KAFKA_HOME/bin/kafka-server-start.sh $KAFKA_HOME/config/server.properties &
 KAFKA_PID=$!
 
