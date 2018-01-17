@@ -3,9 +3,9 @@ FROM ubuntu:14.04
 RUN apt-get -qq update &&\
     apt-get install -y unzip wget curl docker jq coreutils vim lsof
 
-ENV KAFKA_VERSION="0.10.0.1" SCALA_VERSION="2.11"
-ADD download-kafka.sh /tmp/download-kafka.sh
-RUN /tmp/download-kafka.sh && tar xfz /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz -C /opt && rm /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz
+ENV KAFKA_VERSION="1.0.0" SCALA_VERSION="2.11"
+ADD kafka_${SCALA_VERSION}-${KAFKA_VERSION}.tgz /tmp
+RUN mv /tmp/kafka_${SCALA_VERSION}-${KAFKA_VERSION} /opt
 
 VOLUME ["/kafka"]
 
@@ -25,3 +25,4 @@ ENV TERM=xterm
 
 # Use "exec" form so that it runs as PID 1 (useful for graceful shutdown)
 CMD ["/usr/bin/start-kafka.sh"]
+
