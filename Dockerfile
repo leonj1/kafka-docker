@@ -3,7 +3,7 @@ FROM anapsix/alpine-java
 MAINTAINER Jose Leon <leonj1@gmail.com>
 
 RUN apk update && \
-    apk add bash bash-doc bash-completion mysql-client heimdal-telnet
+    apk add bash bash-doc bash-completion mysql-client heimdal-telnet vim
 
 ENV KA_VERSION="1.0.0" SCALA_VERSION="2.11"
 ADD kafka_${SCALA_VERSION}-${KA_VERSION}.tgz /tmp
