@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Source: https://github.com/wurstmeister/kafka-docker
 # KAFKA_CREATE_TOPICS: "Topic1:1:3,Topic2:1:1:compact"
@@ -43,6 +43,9 @@ do
     fi
   fi
 done
+
+echo Diffing scripts
+diff /tmp/server.properties $KAFKA_HOME/config/server.properties
 
 if [[ -n "$CUSTOM_INIT_SCRIPT" ]] ; then
   eval $CUSTOM_INIT_SCRIPT
