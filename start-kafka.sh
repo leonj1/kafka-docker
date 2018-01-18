@@ -4,6 +4,8 @@
 # KAFKA_CREATE_TOPICS: "Topic1:1:3,Topic2:1:1:compact"
 # Topic 1 will have 1 partition and 3 replicas, Topic 2 will have 1 partition, 1 replica and a cleanup.policy set to compact
 
+cp $KAFKA_HOME/config/server.properties{,orig}
+
 if [[ -z "$KAFKA_PORT" ]]; then
     export KAFKA_PORT=9092
 fi
