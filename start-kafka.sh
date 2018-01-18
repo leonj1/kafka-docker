@@ -43,6 +43,7 @@ do
         sed -r -i "s@(^|^#)($kafka_name)=(.*)@\2=${!env_var}@g" $KAFKA_HOME/config/server.properties #note that no config values may contain an '@' char
     else
         echo  kafka_name is $kafka_name AND env_var2 is ${!env_var}
+        echo . >> $KAFKA_HOME/config/server.properties
         echo "$kafka_name=${!env_var}" >> $KAFKA_HOME/config/server.properties
     fi
   fi
