@@ -1,7 +1,9 @@
-FROM ubuntu:14.04
+FROM anapsix/alpine-java
 
-RUN apt-get -qq update &&\
-    apt-get install -y unzip wget curl docker jq coreutils vim lsof
+MAINTAINER Jose Leon <leonj1@gmail.com>
+
+RUN apk update && \
+    apk add bash bash-doc bash-completion mysql-client heimdal-telnet
 
 ENV KA_VERSION="1.0.0" SCALA_VERSION="2.11"
 ADD kafka_${SCALA_VERSION}-${KA_VERSION}.tgz /tmp
@@ -17,10 +19,7 @@ ADD get_host_public_ip.sh /usr/bin/get_host_public_ip.sh
 
 RUN mkdir /logs
 
-ADD jdk-8u121-linux-x64.tar.gz /
-RUN ln -s /jdk1.8.0_121 /jdk
-ENV JAVA_HOME /jdk
-RUN apt-get install -y telnet
+#ENV JAVA_HOME /jdk
 ENV TERM=xterm
 
 # Use "exec" form so that it runs as PID 1 (useful for graceful shutdown)
