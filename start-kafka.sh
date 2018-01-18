@@ -4,7 +4,7 @@
 # KAFKA_CREATE_TOPICS: "Topic1:1:3,Topic2:1:1:compact"
 # Topic 1 will have 1 partition and 3 replicas, Topic 2 will have 1 partition, 1 replica and a cleanup.policy set to compact
 
-cp $KAFKA_HOME/config/server.properties{,orig}
+cp $KAFKA_HOME/config/server.properties{,.orig}
 
 if [[ -z "$KAFKA_PORT" ]]; then
     export KAFKA_PORT=9092
@@ -43,7 +43,7 @@ do
         sed -r -i "s@(^|^#)($kafka_name)=(.*)@\2=${!env_var}@g" $KAFKA_HOME/config/server.properties #note that no config values may contain an '@' char
     else
         echo  kafka_name is $kafka_name AND env_var2 is ${!env_var}
-        echo . >> $KAFKA_HOME/config/server.properties
+        echo -e "\n" >> $KAFKA_HOME/config/server.properties
         echo "$kafka_name=${!env_var}" >> $KAFKA_HOME/config/server.properties
     fi
   fi
